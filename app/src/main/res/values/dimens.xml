@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="padding_margin_0dp">0dp</dimen>
+    <dimen name="padding_margin_20dp">20dp</dimen>
+    <dimen name="radius_6dp">6dp</dimen>
+    <dimen name="padding_margin_12dp">12dp</dimen>
+    <dimen name="txt_30sp">30sp</dimen>
+    <dimen name="txt_22sp">22sp</dimen>
+</resources>
