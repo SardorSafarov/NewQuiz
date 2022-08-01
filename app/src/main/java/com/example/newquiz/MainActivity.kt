@@ -28,6 +28,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         flagListAddData()
         loadQuiz(index)
+
+        ///Sardor
     }
 
     private fun loadQuiz(i: Int) {
