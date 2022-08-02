@@ -155,6 +155,7 @@ class MainActivity : AppCompatActivity() {
             flag += it
         }
         return flag
+
     }
 
     private fun flagListAddData() {
