@@ -10,6 +10,7 @@ import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.core.view.children
 import com.example.newquiz.app.D
 import com.example.newquiz.app.invisble
+import com.example.newquiz.app.visble
 import com.example.newquiz.databinding.ActivityMainBinding
 import com.example.newquiz.model.FlagData
 import java.util.*
@@ -17,9 +18,9 @@ import java.util.*
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var flagList: MutableList<FlagData>
-    private var index = 0
+    private lateinit var btnList: MutableList<Button>
     private lateinit var flagName_main: String
-    private var answer = ""
+    private var index = 0
     private var right = 0
     private var wrong = 0
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,7 +30,6 @@ class MainActivity : AppCompatActivity() {
         flagListAddData()
         loadQuiz(index)
 
-        ///Sardor
     }
 
     private fun loadQuiz(i: Int) {
@@ -40,7 +40,6 @@ class MainActivity : AppCompatActivity() {
                     "Xato Javob = ${wrong}")
             dialog.setPositiveButton("Ok") { dialogInterface: DialogInterface, i: Int ->
                 this.index = 0
-                this.answer = ""
                 this.wrong = 0
                 this.right = 0
                 loadQuiz(this.index)
@@ -55,24 +54,30 @@ class MainActivity : AppCompatActivity() {
             layout2.removeAllViews()
             layout3.removeAllViews()
         }
+
         flagName_main = flagList[index].name
         binding.image.setImageResource(flagList[index].image)
-        loadBtn(flagName_main)
+        loadBtn()
     }
 
-    private fun loadBtn(flagName: String) {
-
-        for (i in 1..flagName.length) {
+    private fun loadBtn() {
+        btnList = mutableListOf()
+        for (i in 1..flagName_main.length) {
             val btn = Button(this)
             btn.id = i
             btn.layoutParams = LinearLayoutCompat.LayoutParams(
                 LinearLayoutCompat.LayoutParams.WRAP_CONTENT,
                 LinearLayoutCompat.LayoutParams.WRAP_CONTENT, 1F
             )
+            btn.setOnClickListener {
+                btnList[btn.hint.toString().toInt()].visble()
+                btn.text = ""
+                btn.hint = ""
+            }
             binding.layout1.addView(btn)
         }
 
-        var randomName = randomFlagName(flagName)
+        var randomName = randomFlagName(flagName_main)
 
         for (i in 0..8) {
             val btn = Button(this)
@@ -86,6 +91,7 @@ class MainActivity : AppCompatActivity() {
                 btnAnsswer(btn.text.toString(), it)
             }
             binding.layout2.addView(btn)
+            btnList.add(btn)
         }
 
         for (i in 9..17) {
@@ -100,32 +106,43 @@ class MainActivity : AppCompatActivity() {
                 btnAnsswer(btn.text.toString(), it)
             }
             binding.layout3.addView(btn)
+            btnList.add(btn)
         }
 
     }
 
     private fun btnAnsswer(text: String, view: View) {
+
         binding.layout1.children.forEach {
             var btn = it as Button
             if (btn.text.isEmpty()) {
-                answer += text
                 btn.text = text
+                btn.setHint(view.id.toString())
                 view.invisble()
-                if (answer.length == flagName_main.length) {
-                    if (answer == flagName_main) {
-                        right++
-                        binding.txtRight.text = "Tog`ri Javob\n${right}"
-                    } else {
-                        wrong++
-                        binding.txtWrong.text = "Xato Javob\n${wrong}"
-                    }
-                    answer = ""
-                    loadQuiz(++index)
-                }
+                checkAnswer()
                 return
             }
         }
+    }
 
+    private fun checkAnswer() {
+        var answer = ""
+        binding.layout1.children.forEach {
+            var btn = it as Button
+            if (btn.text.isNotEmpty()) {
+                answer += btn.text
+            }
+        }
+        if (answer.length == flagName_main.length) {
+            if (answer == flagName_main) {
+                right++
+                binding.txtRight.text = "Tog`ri Javob\n${right}"
+            } else {
+                wrong++
+                binding.txtWrong.text = "Xato Javob\n${wrong}"
+            }
+            loadQuiz(++index)
+        }
     }
 
     private fun randomFlagName(flagName: String): String {
@@ -142,8 +159,9 @@ class MainActivity : AppCompatActivity() {
 
     private fun flagListAddData() {
         flagList = mutableListOf()
-        flagList.add(FlagData("USA", R.drawable.usa))
+
         flagList.add(FlagData("UZBEKISTAN", R.drawable.uzb))
+        flagList.add(FlagData("USA", R.drawable.usa))
         flagList.add(FlagData("KAZAKHSTAN", R.drawable.qozoq))
         flagList.add(FlagData("BRAZILIYA", R.drawable.braz))
         flagList.add(FlagData("CANADA", R.drawable.canada))
@@ -151,5 +169,9 @@ class MainActivity : AppCompatActivity() {
         flagList.add(FlagData("INDIA", R.drawable.india))
         flagList.add(FlagData("RUSSIA", R.drawable.rus))
         flagList.add(FlagData("FRANSIYA", R.drawable.fansiya))
+        flagList.add(FlagData("CHINA", R.drawable.china))
+        flagList.add(FlagData("KOREAN", R.drawable.korea))
+        flagList.add(FlagData("JAPAN", R.drawable.japn))
+
     }
 }
