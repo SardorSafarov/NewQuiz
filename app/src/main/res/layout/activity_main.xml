@@ -32,12 +32,14 @@
           />
 
         <androidx.appcompat.widget.LinearLayoutCompat
+
             android:layout_width="match_parent"
             android:layout_height="@dimen/padding_margin_0dp"
             android:layout_weight="1"
             android:orientation="vertical">
 
             <androidx.appcompat.widget.LinearLayoutCompat
+
                 android:id="@+id/layout1"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/padding_margin_0dp"
@@ -45,12 +47,14 @@
                 android:orientation="horizontal" />
 
             <androidx.appcompat.widget.LinearLayoutCompat
+
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/padding_margin_0dp"
                 android:layout_weight="3"
                 android:paddingTop="@dimen/padding_margin_12dp"
                 android:orientation="vertical">
                 <androidx.appcompat.widget.LinearLayoutCompat
+
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"

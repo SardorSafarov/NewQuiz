@@ -3,6 +3,7 @@ package com.example.newquiz
 import android.content.DialogInterface
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.view.View
 import android.widget.Button
 import androidx.appcompat.app.AlertDialog
@@ -29,13 +30,12 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         flagListAddData()
         loadQuiz(index)
-
     }
 
     private fun loadQuiz(i: Int) {
         if (i + 1 > flagList.size) {
             var dialog = AlertDialog.Builder(this)
-            dialog.setCancelable(true)
+            dialog.setCancelable(false)
             dialog.setMessage("Tog`ri Javob = ${right}\n" +
                     "Xato Javob = ${wrong}")
             dialog.setPositiveButton("Ok") { dialogInterface: DialogInterface, i: Int ->
@@ -43,18 +43,13 @@ class MainActivity : AppCompatActivity() {
                 this.wrong = 0
                 this.right = 0
                 loadQuiz(this.index)
+                binding.txtRight.text = "Tog`ri Javob\n${right}"
+                binding.txtWrong.text = "Xato Javob\n${wrong}"
             }
             dialog.show()
             return
         }
-
-        binding.apply {
-            txtQuiz.text = "${index + 1}-Savol"
-            layout1.removeAllViews()
-            layout2.removeAllViews()
-            layout3.removeAllViews()
-        }
-
+        binding.txtQuiz.text = "${index + 1}-Savol"
         flagName_main = flagList[index].name
         binding.image.setImageResource(flagList[index].image)
         loadBtn()
@@ -70,6 +65,7 @@ class MainActivity : AppCompatActivity() {
                 LinearLayoutCompat.LayoutParams.WRAP_CONTENT, 1F
             )
             btn.setOnClickListener {
+                if (btn.text.isNotEmpty())
                 btnList[btn.hint.toString().toInt()].visble()
                 btn.text = ""
                 btn.hint = ""
@@ -77,7 +73,7 @@ class MainActivity : AppCompatActivity() {
             binding.layout1.addView(btn)
         }
 
-        var randomName = randomFlagName(flagName_main)
+         var randomName = randomFlagName(flagName_main)
 
         for (i in 0..8) {
             val btn = Button(this)
@@ -112,7 +108,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun btnAnsswer(text: String, view: View) {
-
         binding.layout1.children.forEach {
             var btn = it as Button
             if (btn.text.isEmpty()) {
@@ -141,8 +136,24 @@ class MainActivity : AppCompatActivity() {
                 wrong++
                 binding.txtWrong.text = "Xato Javob\n${wrong}"
             }
-            loadQuiz(++index)
+            object :CountDownTimer(500,500){
+                override fun onTick(p0: Long) {
+
+                }
+
+                override fun onFinish() {
+                    binding.apply {
+                        layout1.removeAllViews()
+                        layout2.removeAllViews()
+                        layout3.removeAllViews()
+                    }
+                    loadQuiz(++index)
+                }
+            }.start()
+
+
         }
+
     }
 
     private fun randomFlagName(flagName: String): String {
